@@ -1,13 +1,13 @@
 import { CHALLENGES } from './challenges.js';
+import { avatar } from './avatars.js';
 
-function mulberry32(a) { return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
 const store = {
   get(k) { try { return new Set(JSON.parse(localStorage.getItem(k) || '[]')); } catch { return new Set(); } },
   set(k, s) { try { localStorage.setItem(k, JSON.stringify([...s])); } catch { /* private mode */ } },
 };
 
-export function createCalendar(root, { onOpen, onLocked }) {
+export function createCalendar(root, { onOpen, onLocked, onClosed }) {
   const params = new URLSearchParams(location.search);
   const demo = params.get('demo') === '1' || location.hash === '#demo';
   // ?today=12-07 pretends it is that date (handy for testing)
@@ -21,8 +21,7 @@ export function createCalendar(root, { onOpen, onLocked }) {
   const built = store.get('n8n-advent-built');
 
   // fixed shuffle so the layout is stable between visits
-  const rnd = mulberry32(2025);
-  const order = [...CHALLENGES].sort(() => rnd() - .5);
+  const order = [...CHALLENGES].sort((a, b) => a.day - b.day);
   const slots = new Map();
 
   order.forEach((c, i) => {
@@ -30,7 +29,8 @@ export function createCalendar(root, { onOpen, onLocked }) {
     slot.className = 'slot';
     slot.dataset.color = String(c.day % 6);
     slot.innerHTML = `
-      <div class="inside"><span class="tick" aria-hidden="true">✅</span><span class="ico">${c.icon}</span><span class="ttl">${c.title}</span></div>
+      <div class="inside"><span class="tick" aria-hidden="true">✅</span><span class="ico">${avatar(c.day)}</span><span class="ttl">${c.title}</span></div>
+      <button class="shut" type="button" aria-label="Close door ${c.day}" title="Close door">✕</button>
       <button class="door" type="button"><span class="num">${c.day}</span><span class="sprig" aria-hidden="true">❄</span></button>`;
     const btn = slot.querySelector('.door');
     slots.set(c.day, slot);
@@ -45,6 +45,12 @@ export function createCalendar(root, { onOpen, onLocked }) {
     });
     slot.addEventListener('pointerleave', () => { slot.style.removeProperty('--rx'); slot.style.removeProperty('--ry'); });
     btn.addEventListener('click', () => click(c, slot, btn));
+    slot.querySelector('.shut').addEventListener('click', (e) => {
+      e.stopPropagation();
+      opened.delete(c.day); store.set('n8n-advent-opened', opened);
+      refresh();
+      onClosed?.();
+    });
   });
 
   function label(c, slot) {

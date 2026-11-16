@@ -1,3 +1,6 @@
+import { CHARACTERS } from './characters.js';
+import { avatar } from './avatars.js';
+
 const $ = (id) => document.getElementById(id);
 
 export function createModal({ onClose, onToggleBuilt, isBuilt, toast }) {
@@ -8,6 +11,9 @@ export function createModal({ onClose, onToggleBuilt, isBuilt, toast }) {
     $('mDay').textContent = c.day;
     $('mTitle').textContent = `${c.icon} ${c.title}`;
     $('mHook').textContent = c.hook;
+    const ch = CHARACTERS[c.day - 1];
+    $('mChar').innerHTML = avatar(c.day);
+    $('mSays').textContent = `${ch.name}: “${ch.says}”`;
     $('mDiff').textContent = ['', 'Elf apprentice', 'Workshop pro', "Santa's chief engineer"][c.difficulty] + '  ' + '❄'.repeat(c.difficulty) + '·'.repeat(3 - c.difficulty);
     $('mStory').textContent = c.story;
     $('mStretch').textContent = c.stretch;

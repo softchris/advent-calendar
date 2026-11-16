@@ -221,7 +221,7 @@ h1 span {
 @keyframes fade { from { opacity: 0; } }
 
 .card {
-  position: relative; width: min(680px, 100%); max-height: min(88vh, 900px); overflow: auto;
+  position: relative; width: min(1040px, 100%); max-height: calc(100dvh - 32px); overflow: auto;
   padding: clamp(20px, 4vw, 36px);
   border-radius: 26px;
   background: linear-gradient(165deg, rgba(26, 42, 104, .96), rgba(10, 18, 54, .97));
@@ -279,3 +279,59 @@ h1 span {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   body.zooming .app { transform: none; filter: none; }
 }
+
+/* close an opened door */
+.shut {
+  position: absolute; right: 6%; bottom: 6%; z-index: 6; display: none;
+  width: 28px; height: 28px; border-radius: 50%; border: 0; cursor: pointer;
+  background: rgba(5,11,36,.75); color: #fff; font-size: 13px; line-height: 1;
+}
+.shut:hover, .shut:focus-visible { background: var(--gold, #f5c451); color: #050b24; outline: none; }
+.slot.ajar .shut { display: block; }
+
+/* modal: two columns on wide screens so it fits without scrolling */
+@media (min-width: 820px) {
+  .card {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-areas: "head head" "story req" "nodes req" "stretch req" "actions actions";
+    column-gap: 32px; align-content: start;
+    padding: clamp(18px, 3vh, 32px) clamp(24px, 3vw, 36px);
+  }
+  .card-head { grid-area: head; }
+  .card section { margin-top: clamp(10px, 2vh, 20px); }
+  .card section:nth-of-type(1) { grid-area: story; }
+  .card section:nth-of-type(2) { grid-area: req; }
+  .card section:nth-of-type(3) { grid-area: nodes; }
+  .card section:nth-of-type(4) { grid-area: stretch; }
+  .actions { grid-area: actions; margin-top: clamp(12px, 2.5vh, 24px); }
+  .card p { line-height: 1.5; }
+  .checks { gap: 6px; }
+  .checks li { padding: 8px 12px 8px 38px; font-size: 14px; }
+  .checks li::before { top: 7px; }
+}
+/* short viewports: tighten further */
+@media (max-height: 760px) {
+  .card-day { width: 62px; height: 76px; }
+  .card-day b { font-size: 30px; }
+  .card h2 { font-size: 24px; }
+  .btn { padding: 9px 18px; font-size: 14px; }
+}
+
+/* character speech bubble */
+.says { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.says .char { font-size: 34px; line-height: 1; animation: bob 2.4s ease-in-out infinite; }
+.says p { position: relative; padding: 8px 14px; border-radius: 14px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.14); font-size: 14px; font-style: italic; }
+.says p::before { content: ""; position: absolute; left: -6px; top: 50%; width: 10px; height: 10px; background: inherit; border-left: 1px solid rgba(255,255,255,.14); border-bottom: 1px solid rgba(255,255,255,.14); transform: translateY(-50%) rotate(45deg); }
+.slot.ajar .inside .ico, .slot.opening .inside .ico { animation: bob 2.4s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@media (min-width: 820px) { .says { grid-area: says; } .card { grid-template-areas: "head head" "says says" "story req" "nodes req" "stretch req" "actions actions"; } }
+
+/* cartoon Jan avatars */
+.jan { display: block; overflow: visible; }
+.inside .ico { line-height: 0; }
+.inside .ico .jan { width: clamp(40px, 6vw, 72px); height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,.3)); }
+.says .char { width: 64px; flex: none; animation: none; }
+.says .char .jan { width: 64px; height: auto; animation: bob 2.4s ease-in-out infinite; }
+@media (max-height: 760px) { .says .char, .says .char .jan { width: 52px; } }
+/* keep the content clear of the swung-open door panel */
+.slot.ajar .inside, .slot.opening .inside { padding: 8px 8px 8px 32%; }

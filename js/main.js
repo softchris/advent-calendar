@@ -45,6 +45,7 @@ const modal = createModal({
 
 let pendingDone = null;
 const cal = createCalendar($('calendar'), {
+  onClosed: () => updateProgress(),
   onLocked(day, month, today) {
     audio.thud();
     toast(month === 12 ? `🔒 Door ${day} opens on December ${day}. Only ${day - today} more sleeps!` : `🔒 The doors open from December 1st. Door ${day} on December ${day}.`);
