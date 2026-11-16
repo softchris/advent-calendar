@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#050b24">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&family=Caveat:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
@@ -47,38 +47,57 @@
   <div id="flash" class="flash" aria-hidden="true"></div>
   <div id="sleigh" class="sleigh" aria-hidden="true">🦌🦌🦌🛷</div>
 
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="4" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="12"/>
+    </filter>
+  </svg>
+
   <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" hidden>
     <div class="modal-backdrop" data-close></div>
     <article class="card">
+      <div class="paper" aria-hidden="true"></div>
       <button class="close" type="button" data-close aria-label="Close">✕</button>
-      <div class="card-head">
-        <div class="card-day"><small>Day</small><b id="mDay">1</b></div>
-        <div>
-          <p class="card-diff" id="mDiff"></p>
-          <h2 id="mTitle"></h2>
-          <p class="card-hook" id="mHook"></p>
-        </div>
-      </div>
-      <div class="says"><span id="mChar" class="char" aria-hidden="true"></span><p id="mSays"></p></div>
-      <section>
-        <h3>The story</h3>
-        <p id="mStory"></p>
-      </section>
-      <section>
-        <h3>Your workflow must…</h3>
-        <ul id="mReq" class="checks"></ul>
-      </section>
-      <section>
-        <h3>Nodes that might help</h3>
-        <ul id="mNodes" class="chips"></ul>
-      </section>
-      <section class="stretch">
-        <h3>✨ Stretch goal</h3>
-        <p id="mStretch"></p>
-      </section>
-      <div class="actions">
-        <button id="builtBtn" class="btn primary" type="button">Mark as built</button>
-        <button id="copyBtn" class="btn" type="button">Copy challenge</button>
+      <div class="letter">
+        <header class="l-head">
+          <div class="seal" aria-hidden="true"><small>Day</small><b id="mDay">1</b></div>
+          <div>
+            <p class="card-diff" id="mDiff"></p>
+            <h2 id="mTitle"></h2>
+            <p class="card-hook" id="mHook"></p>
+          </div>
+        </header>
+        <section class="l-story">
+          <p class="dear">Dear Workflow Builder,</p>
+          <p id="mStory"></p>
+        </section>
+        <section class="l-req">
+          <h3>Your task</h3>
+          <ul id="mReq" class="checks"></ul>
+        </section>
+        <section class="l-nodes">
+          <h3>Tools for your satchel</h3>
+          <ul id="mNodes" class="chips"></ul>
+        </section>
+        <section class="l-ps stretch">
+          <h3>P.S. A stretch goal</h3>
+          <p id="mStretch"></p>
+        </section>
+        <footer class="l-foot">
+          <div class="sign">
+            <span id="mChar" class="char" aria-hidden="true"></span>
+            <div>
+              <p class="yours">Merrily yours,</p>
+              <p class="signed" id="mName"></p>
+              <p class="quip" id="mSays"></p>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="builtBtn" class="btn primary" type="button">Mark as built</button>
+            <button id="copyBtn" class="btn" type="button">Copy challenge</button>
+          </div>
+        </footer>
       </div>
     </article>
   </div>

@@ -13,7 +13,8 @@ export function createModal({ onClose, onToggleBuilt, isBuilt, toast }) {
     $('mHook').textContent = c.hook;
     const ch = CHARACTERS[c.day - 1];
     $('mChar').innerHTML = avatar(c.day);
-    $('mSays').textContent = `${ch.name}: “${ch.says}”`;
+    $('mName').textContent = ch.name;
+    $('mSays').textContent = `“${ch.says}”`;
     $('mDiff').textContent = ['', 'Elf apprentice', 'Workshop pro', "Santa's chief engineer"][c.difficulty] + '  ' + '❄'.repeat(c.difficulty) + '·'.repeat(3 - c.difficulty);
     $('mStory').textContent = c.story;
     $('mStretch').textContent = c.stretch;
@@ -39,7 +40,7 @@ export function createModal({ onClose, onToggleBuilt, isBuilt, toast }) {
     current = c; lastFocus = document.activeElement;
     fill(c);
     root.hidden = false;
-    root.querySelector('.card').scrollTop = 0;
+    root.querySelector('.letter').scrollTop = 0;
     root.querySelector('.close').focus({ preventScroll: true });
   }
 
